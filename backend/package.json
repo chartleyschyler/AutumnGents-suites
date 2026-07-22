@@ -1,6 +1,9 @@
 {
   "name": "autumn-gents-suites-backend",
   "version": "1.0.0",
+  "engines": {
+    "node": "22.x"
+  },
   "description": "Backend API for Autumn Gents Suites hostel management system",
   "main": "server.js",
   "scripts": {
