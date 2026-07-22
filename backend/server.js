@@ -22,6 +22,7 @@ const ticketRoutes = require('./routes/tickets');
 const auditRoutes = require('./routes/audit');
 
 const app = express();
+const frontendPath = path.join(__dirname, '..', 'frontend');
 
 // ---------------------------------------------------------------------
 // SECURITY MIDDLEWARE
@@ -50,6 +51,9 @@ app.use(express.urlencoded({ extended: true }));
 // Serve uploaded photos
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// Serve frontend assets for production deployments that use a single service
+app.use(express.static(frontendPath));
+
 // ---------------------------------------------------------------------
 // ROUTES
 // ---------------------------------------------------------------------
@@ -66,6 +70,13 @@ app.use('/api/tickets', ticketRoutes);
 app.use('/api/audit-logs', auditRoutes);
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok', site: 'Autumn Gents Suites' }));
+
+app.get('*', (req, res) => {
+  if (req.path.startsWith('/api/')) {
+    return res.status(404).json({ error: 'Endpoint not found.' });
+  }
+  res.sendFile(path.join(frontendPath, 'index.html'));
+});
 
 // 404 handler
 app.use('/api', (req, res) => res.status(404).json({ error: 'Endpoint not found.' }));
