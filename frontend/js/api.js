@@ -1,11 +1,11 @@
 // ---------------------------------------------------------------------
 // Global config
 // ---------------------------------------------------------------------
-const API_BASE = (() => {
+const API_BASE = window.__API_BASE__ || (() => {
   if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
     return `http://${window.location.hostname}:5000/api`;
   }
-  return 'http://localhost:5000/api';
+  return '/api';
 })();
 
 // ---------------------------------------------------------------------
