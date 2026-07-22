@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sign In | Autumn Gents Suites</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <div class="brand" style="justify-content:center; margin-bottom:18px;"><span class="brand-mark">A</span> Autumn Gents Suites</div>
+    <h2>Sign In</h2>
+    <p class="subtitle">Admin, IT Tech, and Occupant accounts all sign in here.</p>
+
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" required autocomplete="username" />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" required autocomplete="current-password" />
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+      <div class="error-msg" id="errorMsg"></div>
+    </form>
+
+    <div class="auth-links">
+      <a href="forgot-password.html">Forgot password?</a><br /><br />
+      Don't have an account? <a href="register.html">Apply as an occupant</a><br /><br />
+      <a href="index.html">&larr; Back to site</a>
+    </div>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script>
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const errorEl = document.getElementById('errorMsg');
+  errorEl.textContent = '';
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+
+  try {
+    const data = await api('/auth/login', { method: 'POST', body: { email, password }, auth: false });
+    Auth.setSession(data);
+
+    const dashboards = { admin: 'dashboard-admin.html', tech: 'dashboard-tech.html', occupant: 'dashboard-occupant.html' };
+    window.location.href = dashboards[data.user.role] || 'index.html';
+  } catch (err) {
+    errorEl.textContent = err.message;
+  }
+});
+</script>
+</body>
+</html>

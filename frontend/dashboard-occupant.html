@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>My Account | Autumn Gents Suites</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div class="dash-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand"><span class="brand-mark">A</span> My Account</div>
+    <button class="nav-item active" data-tab="overview">🏠 Overview</button>
+    <button class="nav-item" data-tab="billing">💳 Pay Accommodation Fee</button>
+    <button class="nav-item" data-tab="rules">📋 House Rules</button>
+    <button class="nav-item" data-tab="updates">📢 Updates</button>
+    <button class="nav-item" data-tab="tickets">🛠️ Maintenance Requests</button>
+    <button class="nav-item" data-tab="profile">👤 My Profile</button>
+    <button class="nav-item logout-btn" id="logoutBtn">🚪 Logout</button>
+  </aside>
+
+  <main class="dash-main">
+    <div class="dash-header">
+      <h1 id="pageTitle">Overview</h1>
+      <span id="welcomeUser" style="color:var(--text-muted);"></span>
+    </div>
+
+    <section class="tab-panel active" id="tab-overview">
+      <div class="stat-grid" id="statGrid"></div>
+      <div class="card">
+        <h3 style="margin-bottom:14px;">Recent Updates</h3>
+        <div id="updatesPreview"><p class="loading-text">Loading…</p></div>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="tab-billing">
+      <div class="card" style="margin-bottom:20px;">
+        <h3 style="margin-bottom:14px;">Make a Payment</h3>
+        <form id="payForm">
+          <div class="form-row">
+            <div class="form-group"><label>Amount (KES)</label><input type="number" id="payAmount" min="1" required /></div>
+            <div class="form-group"><label>Billing Period</label><input type="text" id="payPeriod" placeholder="e.g. 2026-08" required /></div>
+          </div>
+          <button type="submit" class="btn btn-primary">Pay Online with Card</button>
+          <p style="color:var(--text-muted); font-size:0.82rem; margin-top:10px;">Secure checkout powered by Stripe. You'll be redirected to complete payment.</p>
+        </form>
+      </div>
+      <h3 style="margin-bottom:12px;">Payment History</h3>
+      <div style="overflow-x:auto;"><table id="paymentsTable"><thead><tr><th>Amount</th><th>Period</th><th>Method</th><th>Status</th><th>Date</th></tr></thead><tbody></tbody></table></div>
+    </section>
+
+    <section class="tab-panel" id="tab-rules">
+      <div class="card" id="rulesList"></div>
+    </section>
+
+    <section class="tab-panel" id="tab-updates">
+      <div class="card" id="updatesList"></div>
+    </section>
+
+    <section class="tab-panel" id="tab-tickets">
+      <div class="card" style="margin-bottom:20px;">
+        <h3 style="margin-bottom:14px;">Submit a Maintenance / Tech Request</h3>
+        <form id="ticketForm">
+          <div class="form-group"><label>Title</label><input type="text" id="ticketTitle" required /></div>
+          <div class="form-group"><label>Description</label><textarea id="ticketDescription" rows="3"></textarea></div>
+          <div class="form-group">
+            <label>Priority</label>
+            <select id="ticketPriority"><option value="low">Low</option><option value="normal" selected>Normal</option><option value="high">High</option><option value="urgent">Urgent</option></select>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+      <div style="overflow-x:auto;"><table id="ticketsTable"><thead><tr><th>Title</th><th>Priority</th><th>Status</th><th>Submitted</th></tr></thead><tbody></tbody></table></div>
+    </section>
+
+    <section class="tab-panel" id="tab-profile">
+      <div class="card">
+        <h3 style="margin-bottom:14px;">Update My Profile</h3>
+        <form id="profileForm">
+          <div class="form-group"><label>Full Name</label><input type="text" id="p_fullName" /></div>
+          <div class="form-group"><label>Phone</label><input type="text" id="p_phone" /></div>
+          <div class="form-group"><label>Emergency Contact</label><input type="text" id="p_emergencyContact" /></div>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/dashboard-occupant.js"></script>
+</body>
+</html>

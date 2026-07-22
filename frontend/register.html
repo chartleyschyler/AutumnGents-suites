@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Apply for a Room | Autumn Gents Suites</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div class="auth-wrapper">
+  <div class="auth-card" style="max-width:480px;">
+    <div class="brand" style="justify-content:center; margin-bottom:18px;"><span class="brand-mark">A</span> Autumn Gents Suites</div>
+    <h2>Apply for a Room</h2>
+    <p class="subtitle">Create your occupant account. Admin will confirm your room assignment.</p>
+
+    <form id="registerForm">
+      <div class="form-group">
+        <label for="fullName">Full Name</label>
+        <input type="text" id="fullName" required />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" required />
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" placeholder="+254..." />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="nationalId">National ID / Passport No.</label>
+        <input type="text" id="nationalId" />
+      </div>
+      <div class="form-group">
+        <label for="emergencyContact">Emergency Contact (name &amp; phone)</label>
+        <input type="text" id="emergencyContact" />
+      </div>
+      <div class="form-group">
+        <label for="password">Password (min. 8 characters)</label>
+        <input type="password" id="password" required minlength="8" />
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+      <div class="error-msg" id="errorMsg"></div>
+      <div class="success-msg" id="successMsg"></div>
+    </form>
+
+    <div class="auth-links">
+      Already have an account? <a href="login.html">Sign in</a><br /><br />
+      <a href="index.html">&larr; Back to site</a>
+    </div>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script>
+document.getElementById('registerForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const errorEl = document.getElementById('errorMsg');
+  const successEl = document.getElementById('successMsg');
+  errorEl.textContent = '';
+  successEl.textContent = '';
+
+  const body = {
+    fullName: document.getElementById('fullName').value.trim(),
+    email: document.getElementById('email').value.trim(),
+    phone: document.getElementById('phone').value.trim(),
+    nationalId: document.getElementById('nationalId').value.trim(),
+    emergencyContact: document.getElementById('emergencyContact').value.trim(),
+    password: document.getElementById('password').value,
+  };
+
+  try {
+    const data = await api('/auth/register', { method: 'POST', body, auth: false });
+    successEl.textContent = data.message + ' Redirecting to sign in…';
+    setTimeout(() => (window.location.href = 'login.html'), 1800);
+  } catch (err) {
+    errorEl.textContent = err.message;
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Admin Dashboard | Autumn Gents Suites</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div class="dash-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand"><span class="brand-mark">A</span> Admin Panel</div>
+    <button class="nav-item active" data-tab="overview">📊 Overview</button>
+    <button class="nav-item" data-tab="users">👤 Users</button>
+    <button class="nav-item" data-tab="rooms">🛏️ Rooms &amp; Pricing</button>
+    <button class="nav-item" data-tab="photos">🖼️ Photos</button>
+    <button class="nav-item" data-tab="rules">📋 Rules</button>
+    <button class="nav-item" data-tab="updates">📢 Updates</button>
+    <button class="nav-item" data-tab="locations">📍 Locations</button>
+    <button class="nav-item" data-tab="billing">💳 Billing</button>
+    <button class="nav-item" data-tab="tickets">🛠️ Maintenance</button>
+    <button class="nav-item" data-tab="settings">⚙️ Site &amp; Theme</button>
+    <button class="nav-item" data-tab="audit">🔒 Audit Log</button>
+    <button class="nav-item logout-btn" id="logoutBtn">🚪 Logout</button>
+  </aside>
+
+  <main class="dash-main">
+    <div class="dash-header">
+      <button class="hamburger-dash" id="hamburgerDash" style="display:none;">&#9776;</button>
+      <h1 id="pageTitle">Overview</h1>
+      <span id="welcomeUser" style="color:var(--text-muted);"></span>
+    </div>
+
+    <!-- OVERVIEW -->
+    <section class="tab-panel active" id="tab-overview">
+      <div class="stat-grid" id="statGrid"></div>
+      <div class="card">
+        <h3 style="margin-bottom:14px;">Recent Activity</h3>
+        <div id="recentActivity"><p class="loading-text">Loading…</p></div>
+      </div>
+    </section>
+
+    <!-- USERS -->
+    <section class="tab-panel" id="tab-users">
+      <div style="display:flex; justify-content:space-between; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+        <select id="userRoleFilter" style="padding:8px; border-radius:8px; background:var(--bg-card); color:var(--text-primary); border:1px solid var(--border);">
+          <option value="">All Roles</option>
+          <option value="admin">Admin</option>
+          <option value="tech">Tech</option>
+          <option value="occupant">Occupant</option>
+        </select>
+        <button class="btn btn-primary btn-sm" id="addUserBtn">+ Add User</button>
+      </div>
+      <div style="overflow-x:auto;"><table id="usersTable"><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Room</th><th>Status</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
+    </section>
+
+    <!-- ROOMS -->
+    <section class="tab-panel" id="tab-rooms">
+      <div style="display:flex; justify-content:flex-end; margin-bottom:16px;">
+        <button class="btn btn-primary btn-sm" id="addRoomBtn">+ Add Room</button>
+      </div>
+      <div class="grid grid-3" id="roomsGrid"></div>
+    </section>
+
+    <!-- PHOTOS -->
+    <section class="tab-panel" id="tab-photos">
+      <div class="card" style="margin-bottom:20px;">
+        <h3 style="margin-bottom:14px;">Upload Photo</h3>
+        <form id="photoForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Photo File</label>
+              <input type="file" id="photoFile" accept="image/*" required />
+            </div>
+            <div class="form-group">
+              <label>Category</label>
+              <select id="photoCategory">
+                <option value="gallery">Gallery</option>
+                <option value="room">Room</option>
+                <option value="banner">Banner</option>
+                <option value="history">History</option>
+                <option value="staff">Staff</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group"><label>Caption</label><input type="text" id="photoCaption" /></div>
+          <button type="submit" class="btn btn-primary">Upload</button>
+        </form>
+      </div>
+      <div class="gallery-grid" id="adminGallery"></div>
+    </section>
+
+    <!-- RULES -->
+    <section class="tab-panel" id="tab-rules">
+      <div class="card" style="margin-bottom:20px;">
+        <h3 style="margin-bottom:14px;">Add Rule</h3>
+        <form id="ruleForm">
+          <div class="form-group"><label>Title</label><input type="text" id="ruleTitle" required /></div>
+          <div class="form-group"><label>Content</label><textarea id="ruleContent" rows="3" required></textarea></div>
+          <button type="submit" class="btn btn-primary">Add Rule</button>
+        </form>
+      </div>
+      <div id="rulesAdminList"></div>
+    </section>
+
+    <!-- UPDATES -->
+    <section class="tab-panel" id="tab-updates">
+      <div class="card" style="margin-bottom:20px;">
+        <h3 style="margin-bottom:14px;">Post Update</h3>
+        <form id="updateForm">
+          <div class="form-group"><label>Title</label><input type="text" id="updateTitle" required /></div>
+          <div class="form-group"><label>Content</label><textarea id="updateContent" rows="3" required></textarea></div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Audience</label>
+              <select id="updateAudience"><option value="all">Everyone</option><option value="occupants">Occupants only</option><option value="staff">Staff only</option></select>
+            </div>
+            <div class="form-group">
+              <label>Pin to top?</label>
+              <select id="updatePinned"><option value="0">No</option><option value="1">Yes</option></select>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Post</button>
+        </form>
+      </div>
+      <div id="updatesAdminList"></div>
+    </section>
+
+    <!-- LOCATIONS -->
+    <section class="tab-panel" id="tab-locations">
+      <div class="card" style="margin-bottom:20px;">
+        <h3 style="margin-bottom:14px;">Add Location</h3>
+        <form id="locationForm">
+          <div class="form-row">
+            <div class="form-group"><label>Name</label><input type="text" id="locName" required /></div>
+            <div class="form-group"><label>City</label><input type="text" id="locCity" /></div>
+          </div>
+          <div class="form-group"><label>Address</label><input type="text" id="locAddress" required /></div>
+          <div class="form-row">
+            <div class="form-group"><label>Latitude</label><input type="number" step="any" id="locLat" /></div>
+            <div class="form-group"><label>Longitude</label><input type="number" step="any" id="locLng" /></div>
+          </div>
+          <div class="form-group"><label>Description</label><textarea id="locDescription" rows="2"></textarea></div>
+          <button type="submit" class="btn btn-primary">Add Location</button>
+        </form>
+      </div>
+      <div class="grid grid-2" id="locationsAdminGrid"></div>
+    </section>
+
+    <!-- BILLING -->
+    <section class="tab-panel" id="tab-billing">
+      <div class="card" style="margin-bottom:20px;">
+        <h3 style="margin-bottom:14px;">Record Manual Payment (cash / bank / M-Pesa)</h3>
+        <form id="manualPaymentForm">
+          <div class="form-row">
+            <div class="form-group"><label>Occupant Email</label><input type="email" id="mpEmail" required /></div>
+            <div class="form-group"><label>Amount</label><input type="number" id="mpAmount" min="1" required /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Method</label>
+              <select id="mpMethod"><option value="cash">Cash</option><option value="bank_transfer">Bank Transfer</option><option value="mpesa">M-Pesa</option></select>
+            </div>
+            <div class="form-group"><label>Billing Period</label><input type="text" id="mpPeriod" placeholder="2026-07" /></div>
+          </div>
+          <button type="submit" class="btn btn-primary">Record Payment</button>
+        </form>
+      </div>
+      <div style="overflow-x:auto;"><table id="paymentsTable"><thead><tr><th>Occupant</th><th>Amount</th><th>Method</th><th>Period</th><th>Status</th><th>Date</th></tr></thead><tbody></tbody></table></div>
+    </section>
+
+    <!-- TICKETS -->
+    <section class="tab-panel" id="tab-tickets">
+      <div style="overflow-x:auto;"><table id="ticketsTable"><thead><tr><th>Raised By</th><th>Title</th><th>Priority</th><th>Status</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section class="tab-panel" id="tab-settings">
+      <div class="card">
+        <h3 style="margin-bottom:14px;">Site Description &amp; History</h3>
+        <form id="settingsForm">
+          <div class="form-group"><label>Tagline</label><input type="text" id="s_tagline" /></div>
+          <div class="form-group"><label>Description</label><textarea id="s_description" rows="3"></textarea></div>
+          <div class="form-group"><label>History</label><textarea id="s_history" rows="3"></textarea></div>
+          <h3 style="margin:20px 0 14px;">Social Media</h3>
+          <div class="form-row">
+            <div class="form-group"><label>Facebook URL</label><input type="text" id="s_facebook_url" /></div>
+            <div class="form-group"><label>Twitter / X URL</label><input type="text" id="s_twitter_url" /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Instagram URL</label><input type="text" id="s_instagram_url" /></div>
+            <div class="form-group"><label>TikTok URL</label><input type="text" id="s_tiktok_url" /></div>
+          </div>
+          <div class="form-group"><label>WhatsApp Number (with country code)</label><input type="text" id="s_whatsapp_number" /></div>
+          <h3 style="margin:20px 0 14px;">Developer Credit</h3>
+          <div class="form-row">
+            <div class="form-group"><label>Developer Name</label><input type="text" id="s_developer_name" /></div>
+            <div class="form-group"><label>Developer Email</label><input type="text" id="s_developer_email" /></div>
+          </div>
+          <h3 style="margin:20px 0 14px;">Interface Theme</h3>
+          <div class="form-row">
+            <div class="form-group"><label>Background Color</label><input type="color" id="s_theme_primary" /></div>
+            <div class="form-group"><label>Accent Color</label><input type="color" id="s_theme_accent" /></div>
+          </div>
+          <button type="submit" class="btn btn-primary">Save Settings</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- AUDIT -->
+    <section class="tab-panel" id="tab-audit">
+      <div style="overflow-x:auto;"><table id="auditTable"><thead><tr><th>User</th><th>Action</th><th>Entity</th><th>Time</th></tr></thead><tbody></tbody></table></div>
+    </section>
+
+  </main>
+</div>
+
+<!-- Add User Modal -->
+<div class="modal-backdrop" id="userModalBackdrop">
+  <div class="modal">
+    <h3>Add New User</h3>
+    <form id="addUserForm">
+      <div class="form-group"><label>Full Name</label><input type="text" id="nu_fullName" required /></div>
+      <div class="form-group"><label>Email</label><input type="email" id="nu_email" required /></div>
+      <div class="form-group"><label>Temporary Password</label><input type="text" id="nu_password" required minlength="8" /></div>
+      <div class="form-group">
+        <label>Role</label>
+        <select id="nu_role"><option value="occupant">Occupant</option><option value="tech">IT Tech</option><option value="admin">Admin</option></select>
+      </div>
+      <div class="form-group"><label>Phone</label><input type="text" id="nu_phone" /></div>
+      <div style="display:flex; gap:10px; margin-top:10px;">
+        <button type="submit" class="btn btn-primary btn-block">Create</button>
+        <button type="button" class="btn btn-outline btn-block" id="closeUserModal">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Add Room Modal -->
+<div class="modal-backdrop" id="roomModalBackdrop">
+  <div class="modal">
+    <h3>Add New Room</h3>
+    <form id="addRoomForm">
+      <div class="form-row">
+        <div class="form-group"><label>Room Number</label><input type="text" id="nr_roomNumber" required /></div>
+        <div class="form-group">
+          <label>Type</label>
+          <select id="nr_roomType"><option value="single">Single</option><option value="double">Double</option><option value="shared">Shared</option><option value="dormitory">Dormitory</option><option value="suite">Suite</option></select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Capacity</label><input type="number" id="nr_capacity" min="1" value="1" required /></div>
+        <div class="form-group"><label>Monthly Price</label><input type="number" id="nr_price" min="0" required /></div>
+      </div>
+      <div class="form-group"><label>Description</label><textarea id="nr_description" rows="2"></textarea></div>
+      <div style="display:flex; gap:10px; margin-top:10px;">
+        <button type="submit" class="btn btn-primary btn-block">Create</button>
+        <button type="button" class="btn btn-outline btn-block" id="closeRoomModal">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/dashboard-admin.js"></script>
+</body>
+</html>
