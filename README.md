@@ -30,20 +30,6 @@ content backend, and online billing.
   failed logins, helmet security headers, input validation, parameterized
   SQL queries (no injection risk), and an audit trail of sensitive actions.
 
-## Two things this project can't do for you
-
-1. **It can't create a real email inbox.** `SITE_EMAIL_ADDRESS` in
-   `.env` needs a mailbox you've actually created with a provider —
-   [Zoho Mail](https://www.zoho.com/mail/) has a free plan for a custom
-   domain, or use Google Workspace. Once created, drop its SMTP
-   credentials into `.env` and outgoing mail (welcome emails, receipts,
-   password resets) will work automatically.
-2. **It can't create a live Stripe account.** Sign up at
-   [dashboard.stripe.com](https://dashboard.stripe.com), grab your API
-   keys from Developers → API keys, and put them in `.env`. Until then,
-   the "Pay Online" button will tell occupants that online payments
-   aren't configured yet, and admin can record payments manually.
-
 ## Project structure
 
 ```
@@ -72,80 +58,8 @@ autumn-gents-suites/
     └── js/api.js                 # shared fetch/auth helper
 ```
 
-## Setup
 
-### 1. Backend
 
-```bash
-cd backend
-npm install
-cp .env.example .env
-```
-
-Open `.env` and set at minimum:
-- `JWT_SECRET` and `JWT_REFRESH_SECRET` — run `openssl rand -hex 32` twice
-- `CLIENT_URL` — where your frontend is served from
-- (optional for now) SMTP and Stripe credentials — see above
-
-Create the database and seed the first admin/tech accounts:
-
-```bash
-npm run seed
-```
-
-This prints the seeded login credentials to your terminal, e.g.:
-```
-Created admin: admin@autumngentssuites.com / ChangeMe_Admin123!
-Created tech: tech@autumngentssuites.com / ChangeMe_Tech123!
-```
-
-**Log in and change these passwords immediately** (Admin → Users, or
-have each account use "Forgot password").
-
-Start the server:
-
-```bash
-npm start          # production
-npm run dev         # auto-restart on changes (needs nodemon, already in devDependencies)
-```
-
-The API runs on `http://localhost:5000` by default.
-
-### 2. Frontend
-
-The frontend is plain HTML/CSS/JS — no build step. Serve the `frontend/`
-folder with any static server, for example:
-
-```bash
-cd frontend
-npx serve -l 3000
-```
-
-Then visit `http://localhost:3000`. `frontend/js/api.js` points to
-`http://localhost:5000/api` by default — change `API_BASE` there once
-you deploy the backend somewhere else.
-
-### 3. First login
-
-- **Admin**: use the seeded admin email/password, go to the Users tab,
-  and create your real admin, tech, and occupant accounts from there.
-- **Tech**: created the same way, by an admin, from the Users tab.
-- **Occupants**: can either self-register on `register.html` (status
-  starts as "pending" until admin assigns a room) or be created
-  directly by admin with a room already attached.
-
-## Deploying for real
-
-- Host the backend (Render, Railway, Fly.io, a VPS, etc.) and set
-  `NODE_ENV=production` plus real secrets in its environment variables.
-- Host the frontend as static files (Netlify, Vercel, Cloudflare Pages,
-  or the same server as the backend) and update `API_BASE` in
-  `frontend/js/api.js` to your backend's public URL.
-- Put a real domain in front of both and enable HTTPS (most of the
-  hosts above do this for you automatically) — cookies/tokens should
-  never travel over plain HTTP in production.
-- Register your custom-domain mailbox and Stripe account as described
-  above, then update `.env` with the real values.
 
 ## Security notes
 
